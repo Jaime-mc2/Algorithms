@@ -1,31 +1,32 @@
 class QuickFind:
     def __init__(self, n):
         self.nodes = [i for i in range(n)]
+        self.sizes = [1] * n
     
     def isRoot(self, n):
         return self.nodes[n] == n
     
     def getRoot(self, n):
         i = n
-        distance = 0
 
         while not self.isRoot(self.nodes[i]):
             i = self.nodes[i]
-            distance += 1
         
-        return i, distance
+        return i
 
     def connect(self, a, b):
-        rootA, distA = self.getRoot(a)
-        rootB, distB = self.getRoot(b)
+        rootA = self.getRoot(a)
+        rootB = self.getRoot(b)
 
-        if distA >= distB:
-            self.nodes[rootB] = rootA
-        else:
+        if self.sizes[rootA] < self.sizes[rootB]:
             self.nodes[rootA] = rootB
+            self.sizes[rootB] += self.sizes[rootA]
+        else:
+            self.nodes[rootB] = rootA
+            self.sizes[rootA] += self.sizes[rootB]
     
-    def areConnected(self, a, b):
-        rootA, _ = self.getRoot(a)
-        rootB, _ = self.getRoot(b)
+    def isConnected(self, a, b):
+        rootA = self.getRoot(a)
+        rootB = self.getRoot(b)
 
         return rootA == rootB
